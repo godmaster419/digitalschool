@@ -2,12 +2,12 @@ import React from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getClassById, getAllClasses } from "@/data/classes";
-import { getSubjectById } from "@/data/subjects";
+import { fetchPublicClassBySlug, fetchPublicSubjectsForClass } from "@/lib/data-service";
+import { getAllClasses } from "@/data/classes";
 import { getTopicsForClassAndSubject } from "@/data/topics";
 import { SubjectCard } from "@/components/SubjectCard";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
-import { GraduationCap, ArrowLeft } from "lucide-react";
+import { GraduationCap, ArrowLeft, Clock } from "lucide-react";
 
 interface ClassPageProps {
   params: Promise<{
@@ -25,9 +25,9 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: ClassPageProps): Promise<Metadata> {
   const { classId } = await params;
-  const classItem = getClassById(classId);
+  const classItem = await fetchPublicClassBySlug(classId);
 
-  if (!classItem || !classItem.active) {
+  if (!classItem) {
     return {
       title: "Class Not Found | Digital School",
     };
@@ -41,16 +41,39 @@ export async function generateMetadata({ params }: ClassPageProps): Promise<Meta
 
 export default async function ClassPage({ params }: ClassPageProps) {
   const { classId } = await params;
-  const classItem = getClassById(classId);
+  const classItem = await fetchPublicClassBySlug(classId);
 
-  // If class does not exist or is inactive in Version 1, return 404
-  if (!classItem || !classItem.active) {
+  if (!classItem) {
     notFound();
   }
 
-  const subjects = classItem.availableSubjectIds
-    .map((subId) => getSubjectById(subId))
-    .filter(Boolean);
+  // If class is inactive, show friendly upcoming notice instead of raw 404
+  if (!classItem.active) {
+    return (
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 py-16 sm:py-24 text-center">
+        <div className="w-16 h-16 rounded-2xl bg-amber-100 dark:bg-amber-950/80 text-amber-600 dark:text-amber-400 flex items-center justify-center mx-auto mb-4 border border-amber-200 dark:border-amber-900">
+          <Clock className="w-8 h-8" />
+        </div>
+        <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">
+          {classItem.name} Syllabus Coming Soon
+        </h1>
+        <p className="text-sm text-slate-600 dark:text-slate-400 mt-2 max-w-md mx-auto leading-relaxed">
+          The curriculum for {classItem.name} ({classItem.hindiName}) is currently inactive and scheduled for an upcoming release. Please explore active Classes 3 to 8.
+        </p>
+        <div className="mt-6">
+          <Link
+            href="/classes"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 transition-colors shadow-sm"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            <span>Browse Active Classes</span>
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  const subjects = await fetchPublicSubjectsForClass(classItem.id);
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 w-full">

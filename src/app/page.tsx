@@ -10,21 +10,25 @@ import {
   Sparkles,
   Compass,
 } from "lucide-react";
-import { getHomeClasses } from "@/data/classes";
+import {
+  fetchPublicHomeClasses,
+  fetchPublicVideos,
+  fetchPublicWorksheets,
+  fetchPublicBooks,
+} from "@/lib/data-service";
 import { getAllTopics } from "@/data/topics";
-import { getAllVideos, getAllWorksheets, getAllBooks } from "@/data/resources";
 import { ClassCard } from "@/components/ClassCard";
 import { TopicCard } from "@/components/TopicCard";
 import { VideoCard } from "@/components/VideoCard";
 import { WorksheetCard } from "@/components/WorksheetCard";
 import { BookCard } from "@/components/BookCard";
 
-export default function HomePage() {
-  const homeClasses = getHomeClasses();
+export default async function HomePage() {
+  const homeClasses = await fetchPublicHomeClasses();
   const allTopics = getAllTopics();
-  const popularVideos = getAllVideos().slice(0, 3);
-  const featuredWorksheets = getAllWorksheets().slice(0, 3);
-  const curriculumBooks = getAllBooks().slice(0, 3);
+  const popularVideos = (await fetchPublicVideos()).slice(0, 3);
+  const featuredWorksheets = (await fetchPublicWorksheets()).slice(0, 3);
+  const curriculumBooks = (await fetchPublicBooks()).slice(0, 3);
 
   // Curate 6 standout topics across classes
   const featuredTopics = allTopics.slice(0, 6);

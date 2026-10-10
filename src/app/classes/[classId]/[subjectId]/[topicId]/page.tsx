@@ -2,9 +2,8 @@ import React from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getClassById } from "@/data/classes";
+import { fetchPublicClassBySlug, fetchPublicTopic, fetchPublicTopics } from "@/lib/data-service";
 import { getSubjectById } from "@/data/subjects";
-import { getTopicInClassAndSubject, getTopicsForClassAndSubject } from "@/data/topics";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { TopicLearningHub } from "@/components/TopicLearningHub";
 import { ArrowLeft } from "lucide-react";
@@ -33,9 +32,9 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: TopicPageProps): Promise<Metadata> {
   const { classId, subjectId, topicId } = await params;
-  const classItem = getClassById(classId);
+  const classItem = await fetchPublicClassBySlug(classId);
   const subject = getSubjectById(subjectId);
-  const topic = getTopicInClassAndSubject(classId, subjectId, topicId);
+  const topic = classItem ? await fetchPublicTopic(classItem.id, subjectId, topicId) : undefined;
 
   if (!classItem || !subject || !topic || !classItem.active) {
     return {
@@ -56,16 +55,16 @@ export async function generateMetadata({ params }: TopicPageProps): Promise<Meta
 
 export default async function TopicPage({ params }: TopicPageProps) {
   const { classId, subjectId, topicId } = await params;
-  const classItem = getClassById(classId);
+  const classItem = await fetchPublicClassBySlug(classId);
   const subject = getSubjectById(subjectId);
-  const topic = getTopicInClassAndSubject(classId, subjectId, topicId);
+  const topic = classItem ? await fetchPublicTopic(classItem.id, subjectId, topicId) : undefined;
 
   if (!classItem || !subject || !topic || !classItem.active) {
     notFound();
   }
 
   // Find neighbouring topics for navigation
-  const allSubjectTopics = getTopicsForClassAndSubject(classItem.id, subject.id);
+  const allSubjectTopics = await fetchPublicTopics(classItem.id, subject.id);
   const currentIndex = allSubjectTopics.findIndex((t) => t.id === topic.id);
   const prevTopic = currentIndex > 0 ? allSubjectTopics[currentIndex - 1] : undefined;
   const nextTopic =

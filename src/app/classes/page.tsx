@@ -2,7 +2,7 @@ import React from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { GraduationCap, ArrowRight, Lock, Calendar } from "lucide-react";
-import { getHomeClasses, getAllClasses } from "@/data/classes";
+import { fetchPublicAllClasses } from "@/lib/data-service";
 import { ClassCard } from "@/components/ClassCard";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 
@@ -12,9 +12,10 @@ export const metadata: Metadata = {
     "Explore classes 3 to 8 syllabus, subjects, chapter-wise notes, conceptual videos, worksheets, and textbooks.",
 };
 
-export default function ClassesCatalogPage() {
-  const activeClasses = getHomeClasses();
-  const inactiveClasses = getAllClasses().filter((c) => !c.active);
+export default async function ClassesCatalogPage() {
+  const allClasses = await fetchPublicAllClasses();
+  const activeClasses = allClasses.filter((c) => c.active);
+  const inactiveClasses = allClasses.filter((c) => !c.active);
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 w-full">

@@ -1,8 +1,7 @@
 import React from "react";
 import type { Metadata } from "next";
 import { Bookmark } from "lucide-react";
-import { getAllBooks } from "@/data/resources";
-import { getHomeClasses } from "@/data/classes";
+import { fetchPublicBooks, fetchPublicHomeClasses } from "@/lib/data-service";
 import { getAllSubjects } from "@/data/subjects";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { BooksExplorer } from "@/components/BooksExplorer";
@@ -13,9 +12,9 @@ export const metadata: Metadata = {
     "Explore and download official NCERT & SCERT curriculum chapter textbooks for Classes 3 to 8.",
 };
 
-export default function BooksPage() {
-  const books = getAllBooks();
-  const classes = getHomeClasses();
+export default async function BooksPage() {
+  const books = await fetchPublicBooks();
+  const classes = await fetchPublicHomeClasses();
   const subjects = getAllSubjects();
 
   return (

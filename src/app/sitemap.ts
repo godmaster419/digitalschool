@@ -3,7 +3,7 @@ import { getAllClasses } from "@/data/classes";
 import { getAllTopics } from "@/data/topics";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://digitalschool.edu";
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://digitalschool.edu";
   const currentDate = new Date().toISOString();
 
   // Core static pages

@@ -15,7 +15,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://digitalschool.edu"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://digitalschool.edu"),
   alternates: {
     canonical: "./",
   },

@@ -1,13 +1,13 @@
 import type { MetadataRoute } from "next";
 
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = "https://digitalschool.edu";
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://digitalschool.edu";
 
   return {
     rules: {
       userAgent: "*",
       allow: "/",
-      disallow: ["/api/"],
+      disallow: ["/api/", "/admin/"],
     },
     sitemap: `${baseUrl}/sitemap.xml`,
   };

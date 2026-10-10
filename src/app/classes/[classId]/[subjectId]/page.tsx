@@ -2,9 +2,8 @@ import React from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getClassById } from "@/data/classes";
+import { fetchPublicClassBySlug, fetchPublicTopics } from "@/lib/data-service";
 import { getSubjectById } from "@/data/subjects";
-import { getTopicsForClassAndSubject } from "@/data/topics";
 import { TopicCard } from "@/components/TopicCard";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { ArrowLeft, BookOpen } from "lucide-react";
@@ -34,7 +33,7 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: SubjectPageProps): Promise<Metadata> {
   const { classId, subjectId } = await params;
-  const classItem = getClassById(classId);
+  const classItem = await fetchPublicClassBySlug(classId);
   const subject = getSubjectById(subjectId);
 
   if (!classItem || !subject || !classItem.active) {
@@ -51,14 +50,14 @@ export async function generateMetadata({ params }: SubjectPageProps): Promise<Me
 
 export default async function SubjectPage({ params }: SubjectPageProps) {
   const { classId, subjectId } = await params;
-  const classItem = getClassById(classId);
+  const classItem = await fetchPublicClassBySlug(classId);
   const subject = getSubjectById(subjectId);
 
   if (!classItem || !subject || !classItem.active) {
     notFound();
   }
 
-  const topics = getTopicsForClassAndSubject(classItem.id, subject.id);
+  const topics = await fetchPublicTopics(classItem.id, subject.id);
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 w-full">

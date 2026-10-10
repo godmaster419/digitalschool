@@ -1,10 +1,18 @@
+"use client";
+
 import React from "react";
 import Link from "next/link";
-import { GraduationCap, Video, FileText, Bookmark } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { GraduationCap, Video, FileText, Bookmark, ShieldCheck } from "lucide-react";
 import { getHomeClasses } from "@/data/classes";
 
 export function Footer() {
+  const pathname = usePathname();
   const homeClasses = getHomeClasses();
+
+  if (pathname?.startsWith("/admin")) {
+    return null;
+  }
 
   return (
     <footer className="mt-auto border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 transition-colors">
@@ -124,6 +132,13 @@ export function Footer() {
             </Link>
             <Link href="/classes" className="hover:text-blue-600 dark:hover:text-blue-400">
               Browse Classes
+            </Link>
+            <Link
+              href="/admin"
+              className="hover:text-blue-600 dark:hover:text-blue-400 flex items-center gap-1 font-medium"
+            >
+              <ShieldCheck className="w-3.5 h-3.5 text-blue-500" />
+              <span>Admin CMS</span>
             </Link>
           </div>
         </div>

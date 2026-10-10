@@ -1,8 +1,7 @@
 import React from "react";
 import type { Metadata } from "next";
 import { Video } from "lucide-react";
-import { getAllVideos } from "@/data/resources";
-import { getHomeClasses } from "@/data/classes";
+import { fetchPublicVideos, fetchPublicHomeClasses } from "@/lib/data-service";
 import { getAllSubjects } from "@/data/subjects";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { VideosExplorer } from "@/components/VideosExplorer";
@@ -13,9 +12,9 @@ export const metadata: Metadata = {
     "Explore conceptual video lectures and experiment demonstrations for Classes 3 to 8.",
 };
 
-export default function VideosPage() {
-  const videos = getAllVideos();
-  const classes = getHomeClasses();
+export default async function VideosPage() {
+  const videos = await fetchPublicVideos();
+  const classes = await fetchPublicHomeClasses();
   const subjects = getAllSubjects();
 
   return (

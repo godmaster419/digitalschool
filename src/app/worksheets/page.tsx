@@ -1,8 +1,7 @@
 import React from "react";
 import type { Metadata } from "next";
 import { FileText } from "lucide-react";
-import { getAllWorksheets } from "@/data/resources";
-import { getHomeClasses } from "@/data/classes";
+import { fetchPublicWorksheets, fetchPublicHomeClasses } from "@/lib/data-service";
 import { getAllSubjects } from "@/data/subjects";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { WorksheetsExplorer } from "@/components/WorksheetsExplorer";
@@ -13,9 +12,9 @@ export const metadata: Metadata = {
     "Download and print chapter-wise practice test worksheets for Classes 3 to 8.",
 };
 
-export default function WorksheetsPage() {
-  const worksheets = getAllWorksheets();
-  const classes = getHomeClasses();
+export default async function WorksheetsPage() {
+  const worksheets = await fetchPublicWorksheets();
+  const classes = await fetchPublicHomeClasses();
   const subjects = getAllSubjects();
 
   return (

@@ -58,11 +58,8 @@ export function Header() {
               <GraduationCap className="w-6 h-6" />
             </div>
             <div className="flex flex-col">
-              <span className="font-bold text-lg leading-tight tracking-tight text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
+              <span className="font-bold text-lg leading-tight tracking-tight text-slate-900 dark:text-slate-100">
                 Digital School
-                <span className="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-blue-100 dark:bg-blue-950/80 text-blue-700 dark:text-blue-300">
-                  v1
-                </span>
               </span>
               <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400">
                 Classes 3 to 8 Learning Platform

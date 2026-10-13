@@ -2,7 +2,7 @@
  * End-to-End HTTP Testing against Live Running Next.js Server
  */
 
-const BASE_URL = "http://localhost:3000";
+const BASE_URL = process.env.TARGET_URL || "https://digitalschool-neon.vercel.app";
 
 interface TestReport {
   test: string;

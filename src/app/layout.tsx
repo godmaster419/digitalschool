@@ -15,7 +15,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://digitalschool.edu"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://digitalschool-neon.vercel.app"),
   alternates: {
     canonical: "./",
   },
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_IN",
-    url: "https://digitalschool.edu",
+    url: process.env.NEXT_PUBLIC_SITE_URL || "https://digitalschool-neon.vercel.app",
     title: "Digital School — Learn Better. Understand Better.",
     description: "Complete educational notes, books, videos, and practice worksheets for Classes 3 to 8.",
     siteName: "Digital School",

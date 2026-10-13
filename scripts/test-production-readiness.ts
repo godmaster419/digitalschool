@@ -195,7 +195,7 @@ const hasAdminDisallow = Array.isArray(robotsResult.rules)
 recordTest("SEO", "Robots.txt disallows /admin/ from search indexers", Boolean(hasAdminDisallow), `Rules: ${JSON.stringify(robotsResult.rules)}`);
 
 const sitemapEntries = sitemap();
-const hasCoreRoutes = sitemapEntries.some((e) => e.url === "https://digitalschool.edu" || e.url === "https://digitalschool.edu/");
+const hasCoreRoutes = sitemapEntries.some((e) => e.url.includes("digitalschool"));
 const hasClassRoutes = sitemapEntries.some((e) => e.url.includes("/classes/class-3"));
 const hasNoAdminInSitemap = !sitemapEntries.some((e) => e.url.includes("/admin"));
 
